@@ -141,8 +141,13 @@ static UIInterfaceOrientationMask _orientationMask = UIInterfaceOrientationMaskA
 
     if (@available(iOS 16.0, *)) {
         NSArray *array = [[[UIApplication sharedApplication] connectedScenes] allObjects];
-        UIWindowScene *scene = (UIWindowScene *)array[0];    UIWindowSceneGeometryPreferencesIOS *geometryPreferences = [[UIWindowSceneGeometryPreferencesIOS alloc] initWithInterfaceOrientations:mask];
-        [scene requestGeometryUpdateWithPreferences:geometryPreferences errorHandler:^(NSError * _Nonnull error) { }];
+        for (UIWindowScene *scene in array) {
+            if ([scene isKindOfClass:[UIWindowScene class]]) {
+                UIWindowSceneGeometryPreferencesIOS *geometryPreferences = [[UIWindowSceneGeometryPreferencesIOS alloc] initWithInterfaceOrientations:mask];
+                [scene requestGeometryUpdateWithPreferences:geometryPreferences errorHandler:^(NSError * _Nonnull error) {
+                }];
+            }
+        }
     } else {
         UIDevice* currentDevice = [UIDevice currentDevice];
         [currentDevice setValue:@(UIInterfaceOrientationUnknown) forKey:orientation];
